@@ -1,4 +1,6 @@
 # simple_solutions-_test_task
+https://testdriven.io/blog/fastapi-and-celery/
+https://python.plainenglish.io/asynchronous-task-queuing-with-celery-d9709364e686
 
 ```sh
 (.venv) sibir007@sibir007:~/repos/simple_solutions-_test_task$ sudo docker compose up -d
@@ -35,5 +37,18 @@ celery=# \q
 ```
 
 ```sh
-docker compose up -d --no-deps --build <service_name>
+sudo docker compose up -d --no-deps --build <service_name>
+```
+
+```sh
+sudo docker compose exec web python -m pytest
+```
+
+```sh
+(.venv) sibir007@sibir007:~/repos/simple_solutions_test_task$ redis-cli ping
+PONG
+```
+
+```sh
+sudo docker compose exec web python -m pytest -k "test_mock_task"
 ```
