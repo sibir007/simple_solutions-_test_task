@@ -20,7 +20,7 @@ services:
   worker:
     container_name: worker
     build: ./project
-    command: celery -A worker worker --loglevel=info --logfile=logs/celery.log
+    command: celery -A selery_app.app:app worker --loglevel=info --logfile=logs/celery.log
     volumes:
       - ./project:/usr/src/app
     env_file: ".env"
@@ -33,7 +33,7 @@ services:
   beat:
     container_name: beat
     build: ./project
-    command: celery -A worker beat --loglevel=info --logfile=logs/beat.log
+    command: celery -A selery_app.app:app beat --loglevel=info --logfile=logs/beat.log
     volumes:
       - ./project:/usr/src/app
     env_file: ".env"
