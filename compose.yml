@@ -29,6 +29,20 @@ services:
     #   - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
       - redis
+
+  beat:
+    container_name: beat
+    build: ./project
+    command: celery -A worker beat --loglevel=info --logfile=logs/beat.log
+    volumes:
+      - ./project:/usr/src/app
+    env_file: ".env"
+    # environment:
+    #   - CELERY_BROKER_URL=redis://redis:6379/0
+    #   - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - worker
       
   dashboard:
     build: ./project
@@ -43,6 +57,7 @@ services:
       - web
       - redis
       - worker
+      - beat
 
   redis:
     image: redis:latest

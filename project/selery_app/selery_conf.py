@@ -17,6 +17,8 @@ app = Celery(
     include=["selery_app.tasks"]  # Модули с задачами для автоматического импорта
 )
 
+
+
 # # Конфигурация Celery
 # celery_app.conf.update(
 #     # Настройки сериализации
