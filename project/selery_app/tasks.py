@@ -2,6 +2,7 @@ import time
 from .app import app
 from celery import Celery
 from celery.schedules import crontab
+import requests
 
 @app.task(name="create_task")
 def create_task(task_type):
@@ -13,6 +14,16 @@ def create_task(task_type):
 def test(msg: str):
     print(msg)
     return True
+
+@app.task
+def get_coin_info(coin: str):
+    pass
+
+@app.task
+def get_index_price(exchange: str, index_name: str):
+    url = f"https://test.deribit.com/api/v2/public/get_index_price?index_name={index_name}"
+    response = requests.get(url)
+    print(response.text)
 
 @app.on_after_finalize.connect
 def setup_periodic_tasks(sender: Celery, **kwargs):
@@ -32,6 +43,7 @@ def setup_periodic_tasks(sender: Celery, **kwargs):
         crontab(hour=7, minute=30, day_of_week=1),
         test.s('Happy Mondays!'),
     )
+    
 
 # from celery.signals import task_received
 

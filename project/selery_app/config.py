@@ -1,7 +1,7 @@
 import os
 from kombu import Queue
 
-
+# TODO: depricated property
 class BaseConfig:
 
     CELERY_BROKER_URL: str = os.environ.get(

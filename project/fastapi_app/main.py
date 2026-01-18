@@ -7,13 +7,23 @@ from celery.result import AsyncResult
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="fastapi_app/static"), name="static")
-templates = Jinja2Templates(directory="fastapi_app/templates")
+test_templates = Jinja2Templates(directory="fastapi_app/templates")
 
 
 
 @app.get("/")
 async def home(request: Request):
-    return templates.TemplateResponse("home.html", context={"request": request})
+    return test_templates.TemplateResponse("home/home.html", context={"request": request})
+
+@app.get("/test")
+async def test(request: Request):
+    return test_templates.TemplateResponse("test/home.html", context={"request": request})
+
+@app.get("/currency")
+async def test(request: Request):
+    return test_templates.TemplateResponse("currency/home.html", context={"request": request})
+
+
 
 
 @app.post("/tasks", status_code=201)
