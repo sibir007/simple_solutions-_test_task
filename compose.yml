@@ -20,7 +20,7 @@ services:
   worker:
     container_name: worker
     build: ./project
-    command: celery -A selery_app.app:app worker --loglevel=info --logfile=logs/celery.log
+    command: celery -A selery_app.app:app worker --loglevel=info --logfile=logs/celery.log -P gevent
     volumes:
       - ./project:/usr/src/app
     env_file: ".env"

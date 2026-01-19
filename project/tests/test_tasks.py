@@ -47,3 +47,8 @@ def test_task_status(test_app):
 
 def test_get_index_price():
     assert get_index_price.run("btc_usd")
+
+def test_get_index_price_async():
+    task = get_index_price.delay("btc_usd")
+    print(task.id)
+    assert task.id
