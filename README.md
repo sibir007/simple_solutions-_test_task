@@ -52,3 +52,7 @@ PONG
 ```sh
 sudo docker compose exec web python -m pytest -k "test_mock_task"
 ```
+
+```sh
+sudo docker exec web python -m pytest -s -k test_get_index_price # -s выод print to terminal
+```

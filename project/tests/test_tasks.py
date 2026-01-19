@@ -1,4 +1,4 @@
-from selery_app.tasks import create_task
+from selery_app.tasks import create_task, get_index_price
 from unittest.mock import patch
 import json
 
@@ -44,3 +44,6 @@ def test_task_status(test_app):
         response = test_app.get(f"tasks/{task_id}")
         content = response.json()
     assert content == {"task_id": task_id, "task_status": "SUCCESS", "task_result": True}
+
+def test_get_index_price():
+    assert get_index_price.run("btc_usd")

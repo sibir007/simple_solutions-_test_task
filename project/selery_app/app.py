@@ -1,6 +1,6 @@
 
 from celery import Celery
-from .config import settings
+from config import settings
 
 # CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
 # CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")

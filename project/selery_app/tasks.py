@@ -15,15 +15,14 @@ def test(msg: str):
     print(msg)
     return True
 
-@app.task
-def get_coin_info(coin: str):
-    pass
 
 @app.task
-def get_index_price(exchange: str, index_name: str):
+def get_index_price(index_name: str):
+    connect_timeout, read_timeout = 5.0, 30.0
     url = f"https://test.deribit.com/api/v2/public/get_index_price?index_name={index_name}"
-    response = requests.get(url)
+    response = requests.get(url, timeout=(connect_timeout, read_timeout))
     print(response.text)
+    return True
 
 @app.on_after_finalize.connect
 def setup_periodic_tasks(sender: Celery, **kwargs):
