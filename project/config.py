@@ -35,7 +35,7 @@ class DevelopmentConfig(BaseConfig):
     POSTGRES_DB: str = os.environ.get(
         "POSTGRES_DB_DEV"
     )
-    DATABASE_URL: str = f'postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:{DB_PORT}/{POSTGRES_DB}'
+    DATABASE_URL: str = f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:{DB_PORT}/{POSTGRES_DB}'
 
 
 class ProductionConfig(BaseConfig):

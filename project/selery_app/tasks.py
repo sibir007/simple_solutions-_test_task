@@ -24,7 +24,7 @@ def get_index_price(index_name: str):
     # url = f"https://test.deribit.com/api/v2/public/get_index_price?index_name={index_name}"
     
     try:
-        res = StockBase.call_api_one('deribit', 'get_index_price', index_name='btc_usd')
+        res = StockBase.call_api_one('deribit', 'get_index_price', index_name=index_name)
         # response = requests.get(url, timeout=(connect_timeout, read_timeout))
     except requests.RequestException as e:
         print(f"Request failed: {e}")

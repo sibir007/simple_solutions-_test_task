@@ -1,47 +1,33 @@
-# version: '3.9'
 
 services:
 
-  postgres:
-    image: postgres:latest
+  db:
+    image: postgres
     container_name: postgres_db
-    # env_file: ".env_db_dev"
-    # env_file: ".env_db_prod"
+    restart: always
+    # set shared memory limit when using docker compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
     environment:
       POSTGRES_USER: sibir
       POSTGRES_PASSWORD: sibirpass
       POSTGRES_DB: selery_app
-      PGDATA: /var/lib/postgresql/data/pgdata
+      PGDATA: /var/lib/postgresql/data/pgdata    
     ports:
       - "5430:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data/pgdata
-      # - ../2. Init Database:/docker-entrypoint-initdb.d
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: '0.50'
-    #       memory: 512M
-    #     reservations:
-    #       cpus: '0.25'
-    #       memory: 256M
-    # command: >
-    #   postgres -c max_connections=1000
-    #            -c shared_buffers=256MB
-    #            -c effective_cache_size=768MB
-    #            -c maintenance_work_mem=64MB
-    #            -c checkpoint_completion_target=0.7
-    #            -c wal_buffers=16MB
-    #            -c default_statistics_target=100
-    # healthcheck:
-    #   test: [ "CMD-SHELL", "pg_isready -U postgres_user -d postgres_db" ]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 5
-    restart: unless-stopped
-    # tty: true
-    # stdin_open: true
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8090:8080
 
 volumes:
   pgdata:
-    # driver: local
+    driver: local

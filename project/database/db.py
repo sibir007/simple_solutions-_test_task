@@ -5,9 +5,9 @@ from . import models
 import datetime
 
 from config import get_settings
-# from models import Exchange
 
 DATABASE_URL = get_settings().DATABASE_URL
+
 
 # DATABASE_URL = f'postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
@@ -18,15 +18,34 @@ def get_session():
         yield session
 
 
-def init_db():
+def create_db():
     SQLModel.metadata.create_all(engine)
+
+def init_db_with_start_value():
+    create_db() # if db not exist
+    drop_db()
+    create_db()
+    with Session(engine) as session:
+
+        exch1 = models.Exchange(name="binance")
+        exch2 = models.Exchange(name="upbit")
+        
+        ix1 = models.Index(name="btc_usd")
+        ix2 = models.Index(name="btc_eurr")
+        
+        session.add(exch1)
+        session.add(exch2)
+        session.add(ix1)
+        session.add(ix2)
+        
+        session.commit()
 
 
 def drop_db():
     SQLModel.metadata.drop_all(engine)
 
 
-def fill_db():
+def fill_db_start_data():
     with Session(engine) as session:
 
         exch1 = models.Exchange(name="Binance")
@@ -86,8 +105,8 @@ def fill_db():
 
 def main():
     drop_db()
-    init_db()
-    fill_db()
+    create_db()
+    fill_db_start_data()
     main()
 
 
