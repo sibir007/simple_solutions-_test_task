@@ -1,8 +1,8 @@
 from sqlmodel import SQLModel, Field
 from datetime import datetime, date, time, timezone
+from .selery_app_shemas import RawIndexPrise
 
-
-class Exchange(SQLModel, table=True):
+class Stock(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str
 
@@ -17,7 +17,8 @@ class Index(SQLModel, table=True):
 
 class IndexPrice(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    exc_id: int = Field(foreign_key="exchange.id")
+    st_id: int = Field(foreign_key="stock.id")
     idx_id: int = Field(foreign_key="index.id")
     timestamp: datetime = Field(nullable=False)
     prise: float = Field(nullable=False)
+

@@ -15,6 +15,8 @@ psycopg2-binary==2.9.11
 
 sqlmodel==0.0.31
 
-asyncpg=0.31.0 # for client
+# for client
+# asyncpg=0.31.0 
 
-python-dotenv=1.2.1 # for init db
+# for init db
+python-dotenv==1.2.1

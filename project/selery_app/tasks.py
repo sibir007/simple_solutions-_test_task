@@ -4,6 +4,8 @@ from celery import Celery
 from celery.schedules import crontab
 import requests
 from .stocks import StockBase
+from database.write_data import write_index_price
+
 
 @app.task(name="create_task")
 def create_task(task_type):
@@ -24,19 +26,21 @@ def get_index_price(index_name: str):
     # url = f"https://test.deribit.com/api/v2/public/get_index_price?index_name={index_name}"
     
     try:
-        res = StockBase.call_api_one('deribit', 'get_index_price', index_name=index_name)
+        raw_index_price = StockBase.call_api_one('deribit', 'get_index_price', index_name=index_name)
         # response = requests.get(url, timeout=(connect_timeout, read_timeout))
     except requests.RequestException as e:
         print(f"Request failed: {e}")
         return False
-    print(res)
+    
+    print(raw_index_price)
+    write_index_price(raw_index_price)
     return True
 
 @app.on_after_finalize.connect
 def setup_periodic_tasks(sender: Celery, **kwargs):
     # Calls test('hello') every 10 seconds.
     sender.add_periodic_task(10.0, test.s('hello'), name='add every 10')
-    sender.add_periodic_task(10.0, get_index_price.s('btc_usd'), name='get_price')
+    sender.add_periodic_task(60.0, get_index_price.s('btc_usd'), name='get_price')
 
     # Calls test('hello') every 30 seconds.
     # It uses the same signature of previous task, an explicit name is

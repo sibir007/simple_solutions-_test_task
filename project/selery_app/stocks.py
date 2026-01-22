@@ -1,20 +1,14 @@
-from abc import ABCMeta, abstractmethod
-from pydantic import BaseModel
 from datetime import datetime, timezone
 import requests
 import inspect
+from  shemas.selery_app_shemas import RawIndexPrise, RawContractSise
 
-class IndexPrise(BaseModel):
-    stock: str
-    idx: str
-    idx_prise: float
-    idx_prise_time: datetime
 
-class ContractSise(BaseModel):
-    stock: str
-    contract_size: int
+class NoInstances(type):
+    def __call__(self, *args, **kwargs):
+        raise TypeError("Can't instantiate directly")
 
-class StockBase:
+class StockBase(metaclass=NoInstances):
 
     _stock_name = "stockbase"
 
@@ -66,11 +60,11 @@ class StockBase:
         return cls._stock_name
 
     @classmethod
-    def get_contract_size(cls) -> ContractSise:
+    def get_contract_size(cls) -> RawContractSise:
         pass
 
     @classmethod
-    def get_index_price(cls, index_name: str) -> IndexPrise:
+    def get_index_price(cls, index_name: str) -> RawIndexPrise:
         pass
 
 
@@ -80,7 +74,7 @@ class SomeStock(StockBase):
 
     # TODO: implement
     @classmethod
-    def get_index_price(cls, index_name: str) -> IndexPrise:
+    def get_index_price(cls, index_name: str) -> RawIndexPrise:
         raise NotImplementedError("NotImplementedError")
 
 class DeriBit(StockBase):
@@ -88,9 +82,8 @@ class DeriBit(StockBase):
     _stock_name = "deribit"
 
     @classmethod
-    def get_index_price(cls, index_name: str) -> IndexPrise:
+    def get_index_price(cls, index_name: str) -> RawIndexPrise:
         # True case
-        # --------------------------------------------------------------------------------
         # {
         #   "jsonrpc": "2.0",
         #   "result": {
@@ -108,7 +101,7 @@ class DeriBit(StockBase):
         response = requests.get(url, timeout=(connect_timeout, read_timeout))
         match response.json():
             case {"result": { "index_price": prise}}:
-                return IndexPrise(stock=cls._get_stock_name(), 
+                return RawIndexPrise(stock=cls._get_stock_name(), 
                                 idx=index_name, 
                                 idx_prise=prise,
                                 # idx_prise=float(rez.get("index_price")),

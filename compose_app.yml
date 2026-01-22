@@ -4,8 +4,9 @@ services:
   web:
     container_name: web
     build: ./project
-    ports:
-      - 8004:8000
+    # network_mode: host
+    # ports:
+    #   - 8004:8000
     command: uvicorn fastapi_app.main:app --host 0.0.0.0 --reload
     volumes:
       - ./project:/usr/src/app
@@ -13,6 +14,7 @@ services:
     # environment:
     #   - CELERY_BROKER_URL=redis://redis:6379/0
     #   - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    network_mode: host
     depends_on:
       - redis
 
@@ -26,6 +28,7 @@ services:
     # environment:
     #   - CELERY_BROKER_URL=redis://redis:6379/0
     #   - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    network_mode: host
     depends_on:
       - redis
 
@@ -39,15 +42,17 @@ services:
     # environment:
     #   - CELERY_BROKER_URL=redis://redis:6379/0
     #   - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    network_mode: host
     depends_on:
       - redis
       - worker
       
   dashboard:
     build: ./project
-    command: celery --broker=redis://redis:6379/0 flower --port=5555
-    ports:
-      - 5556:5555
+    command: celery --broker=${CELERY_BROKER_URL} flower --port=5555
+    network_mode: host
+    # ports:
+    #   - 5556:5555
     env_file: ".env"
     # environment:
     #   - CELERY_BROKER_URL=redis://redis:6379/0
