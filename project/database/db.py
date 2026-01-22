@@ -24,20 +24,20 @@ def init_db_with_start_value():
     create_db() # if db not exist
     drop_db()
     create_db()
-    with Session(engine) as session:
+    # with Session(engine) as session:
 
-        exch1 = db_models.Stock(name="binance")
-        exch2 = db_models.Stock(name="deribit")
+    #     exch1 = db_models.Stock(name="binance")
+    #     exch2 = db_models.Stock(name="deribit")
         
-        ix1 = db_models.Index(name="btc_usd")
-        ix2 = db_models.Index(name="btc_eurr")
+    #     ix1 = db_models.Index(name="btc_usd")
+    #     ix2 = db_models.Index(name="eth_usd")
         
-        session.add(exch1)
-        session.add(exch2)
-        session.add(ix1)
-        session.add(ix2)
+    #     session.add(exch1)
+    #     session.add(exch2)
+    #     session.add(ix1)
+    #     session.add(ix2)
         
-        session.commit()
+    #     session.commit()
 
 
 def drop_db():

@@ -39,22 +39,23 @@ def get_index_price(index_name: str):
 @app.on_after_finalize.connect
 def setup_periodic_tasks(sender: Celery, **kwargs):
     # Calls test('hello') every 10 seconds.
-    sender.add_periodic_task(10.0, test.s('hello'), name='add every 10')
-    sender.add_periodic_task(60.0, get_index_price.s('btc_usd'), name='get_price')
+    # sender.add_periodic_task(10.0, test.s('hello'), name='add every 10')
+    sender.add_periodic_task(60.0, get_index_price.s('btc_usd'), name='get_price_btc_usd')
+    sender.add_periodic_task(60.0, get_index_price.s('eth_usd'), name='get_price_eth_usd')
 
     # Calls test('hello') every 30 seconds.
     # It uses the same signature of previous task, an explicit name is
     # defined to avoid this task replacing the previous one defined.
-    sender.add_periodic_task(30.0, test.s('hello'), name='add every 30')
+    # sender.add_periodic_task(30.0, test.s('hello'), name='add every 30')
 
     # Calls test('world') every 30 seconds
-    sender.add_periodic_task(30.0, test.s('world'), expires=10)
+    # sender.add_periodic_task(30.0, test.s('world'), expires=10)
 
-    # Executes every Monday morning at 7:30 a.m.
-    sender.add_periodic_task(
-        crontab(hour=7, minute=30, day_of_week=1),
-        test.s('Happy Mondays!'),
-    )
+    # # Executes every Monday morning at 7:30 a.m.
+    # sender.add_periodic_task(
+    #     crontab(hour=7, minute=30, day_of_week=1),
+    #     test.s('Happy Mondays!'),
+    # )
     
 
 # from celery.signals import task_received
