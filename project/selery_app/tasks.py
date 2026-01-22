@@ -42,6 +42,8 @@ def setup_periodic_tasks(sender: Celery, **kwargs):
     # sender.add_periodic_task(10.0, test.s('hello'), name='add every 10')
     sender.add_periodic_task(60.0, get_index_price.s('btc_usd'), name='get_price_btc_usd')
     sender.add_periodic_task(60.0, get_index_price.s('eth_usd'), name='get_price_eth_usd')
+    sender.add_periodic_task(60.0, get_index_price.s('btc_eurr'), name='get_price_btc_eurr')
+    sender.add_periodic_task(60.0, get_index_price.s('eth_eurr'), name='get_price_eth_eurr')
 
     # Calls test('hello') every 30 seconds.
     # It uses the same signature of previous task, an explicit name is
