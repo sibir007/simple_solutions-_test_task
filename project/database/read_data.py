@@ -5,7 +5,7 @@ from shemas.db_models import Stock, Index, IndexPrice, Ticker
 from datetime import datetime
 
 
-def select_st():
+def _select_st():
     return (
             select(
                 Stock.name,
@@ -14,86 +14,97 @@ def select_st():
                 IndexPrice.price,
                 IndexPrice.timestamp,
             )
-            .join(Stock, isouter=True)
-            .join(Ticker, isouter=True)
-            .join(Index, isouter=True)
+            .join(Stock)
+            .join(Ticker)
+            .join(Index)
         )
 
-def pack_to_dict_list(tuple_list):
+def _pack_to_dict_list(tuple_list):
     return [{"stock": stock, "ticker": ticker, "index": index, "price": price,  "date": dates} for 
                           stock, ticker, index, price, dates in tuple_list]
 
-def get_index_case_1(stock, ticker):
+def _get_index_case_1(stock, ticker):
     with Session(engine) as s:
-        select_st_where = select_st()\
+        select_st_where = _select_st()\
             .where(Stock.name == stock)\
                 .where(Ticker.name == ticker)
         res_rows = s.exec(select_st_where).all()
-    return pack_to_dict_list(res_rows)
+    return _pack_to_dict_list(res_rows)
     
-def get_index_case_2(stock, ticker, index):
+def _get_index_case_2(stock, ticker, index):
     with Session(engine) as s:
-        select_st_where = select_st()\
+        select_st_where = _select_st()\
             .where(Stock.name == stock)\
                 .where(Ticker.name == ticker)\
                     .where(Index.name == index)
         res_rows = s.exec(select_st_where).all()
-    return pack_to_dict_list(res_rows)
+    return _pack_to_dict_list(res_rows)
+
+def _get_index_case_3(stock:str, ticker:str, index:str, dates: list[datetime]):
+    assert len(dates) == 2
+    dates.sort()
+    with Session(engine) as s:
+        select_st_where = _select_st()\
+            .where(Stock.name == stock)\
+                .where(Ticker.name == ticker)\
+                    .where(Index.name == index)\
+                        .where(IndexPrice.timestamp >= dates[0])\
+                            .where(IndexPrice.timestamp < dates[1])
+        res_rows = s.exec(select_st_where).all()
+    return _pack_to_dict_list(res_rows)
+
+def _get_index_case_4(stock, ticker, index, date: datetime):
+    d1 = date.replace(hour=0,minute=0,second=0,microsecond=0)
+    d2 = d1.replace(hour=23,minute=59,second=59,microsecond=999999)
+    return _get_index_case_3(stock, ticker, index, [d1,d2])
+
+
+def _get_index_case_5(stock:str, ticker:str, dates: list[datetime]):
+    assert len(dates) == 2
+    dates.sort()
+    with Session(engine) as s:
+        select_st_where = _select_st()\
+            .where(Stock.name == stock)\
+                .where(Ticker.name == ticker)\
+                        .where(IndexPrice.timestamp >= dates[0])\
+                            .where(IndexPrice.timestamp < dates[1])
+        res_rows = s.exec(select_st_where).all()
+    return _pack_to_dict_list(res_rows)
+
+def _get_index_case_6(stock, ticker, date: datetime):
+    d1 = date.replace(hour=0,minute=0,second=0,microsecond=0)
+    d2 = d1.replace(hour=23,minute=59,second=59,microsecond=999999)
+    return _get_index_case_5(stock, ticker, [d1,d2])
+
 
 def get_trick_index_info(request):
-    with Session(engine) as session:
-        match request:
-            # case_1 client.get("/deribit?ticker=btc")
-            case {"stock": stock, "ticker": ticker, "index": None, "dates": None}:
-                return get_index_case_1(stock, ticker)
-            # case_2 client.get("/deribit?ticker=btc&index=usd")
-            case {"stock": stock, "ticker": ticker, "index": index, "dates": None}:
-                return get_index_case_2(stock, ticker, index)
-            case {"stock": stock, "ticker": ticker, "index": index, "dates": dates}:
-                match dates:
-                    # case_3 client.get("/deribit?ticker=btc&index=usd&dates=2026-01-02T00:00:00.000000&dates=2026-01-02T23:59:59.999999")
-                    case [date1, date2]:
-                        return [
-                            {
-                                "stock": stock,
-                                "ticker": ticker,
-                                "index": index,
-                                "dates": [date1, date2],
-                            }
-                        ]
-                    # case_4
-                    case [date]:
-                        return [
-                            {
-                                "stock": stock,
-                                "ticker": ticker,
-                                "index": index,
-                                "dates": [date],
-                            }
-                        ]
-            case {"stock": stock, "ticker": ticker, "index": None, "dates": dates}:
-                match dates:
-                    # case_5
-                    case [date1, date2]:
-                        return [
-                            {
-                                "stock": stock,
-                                "ticker": ticker,
-                                "index": None,
-                                "dates": [date1, date2],
-                            }
-                        ]
-                    # case_6
-                    case [date]:
-                        return [
-                            {
-                                "stock": stock,
-                                "ticker": ticker,
-                                "index": None,
-                                "dates": [date],
-                            }
-                        ]
-            case _:
-                return [{"stock": None, "ticker": None, "index": None, "dates": None}]
+    match request:
+        # case_1 client.get("/deribit?ticker=btc")
+        case {"stock": stock, "ticker": ticker, "index": None, "dates": None}:
+            return _get_index_case_1(stock, ticker)
+        # case_2 client.get("/deribit?ticker=btc&index=usd")
+        case {"stock": stock, "ticker": ticker, "index": index, "dates": None}:
+            return _get_index_case_2(stock, ticker, index)
+        case {"stock": stock, "ticker": ticker, "index": None, "dates": dates}:
+            match dates:
+                # case_5 client.get("/deribit?ticker=btc&dates=2026-01-02T00:00:00.000000&dates=2026-01-02T23:58:59.999999")
+                case [_, _]:
+                    return _get_index_case_5(stock, ticker, dates)
+                # case_6
+                case [date]:
+                    return _get_index_case_6(stock, ticker, date)
+        case {"stock": stock, "ticker": ticker, "index": index, "dates": dates}:
+            match dates:
+                # case_3 client.get("/deribit?ticker=btc&index=usd&dates=2026-01-02T00:00:00.000000&dates=2026-01-02T23:59:59.999999")
+                case [_, _]:
+                    
+                    return _get_index_case_3(stock, ticker, index, dates) 
+                # case_4 client.get("/deribit?ticker=btc&index=usd&dates=2026-01-02T23:58:59.999999")
+                case [date]:
+                    return _get_index_case_4(stock, ticker, index, date) 
+        
+        case _:
+            return [{"stock": None, "ticker": None, "index": None, "dates": None}]
 
+    # with Session(engine) as session:
 

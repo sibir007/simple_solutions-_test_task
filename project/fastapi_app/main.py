@@ -17,7 +17,8 @@ app.mount("/static", StaticFiles(directory="fastapi_app/static"), name="static")
 test_templates = Jinja2Templates(directory="fastapi_app/templates")
 
 
-@app.get("/{stock}")
+@app.get("/{stock}", description="""
+""")
 async def home(
     stock: Annotated[
         Literal["deribit", "somestock"],
