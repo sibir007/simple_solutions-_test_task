@@ -269,6 +269,7 @@ COPY . .
 .
 ├── compose_app.yml        # run fastapi selery app containers
 ├── compose_db.yml         # run db container
+├── expample_env           # .env
 ├── LICENSE                
 ├── pgdata                 # db data
 ├── project
@@ -292,7 +293,7 @@ COPY . .
 
 ### Design
 
-![DESIGN DECISION](readme/des.svg)
+![DESIGN DECISION](readme/des4.svg)
 
 
 ## DEPLOYMENT
@@ -310,7 +311,13 @@ Receiving objects: 100% (292/292), 265.01 KiB | 1.05 MiB/s, done.
 Resolving deltas: 100% (169/169), done.
 sibir007@sibir007:~/repos/deploy/db$ cd simple_solutions_test_task/
 sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ ls
-compose_app.yml  compose_db.yml  LICENSE  project  readme  README_dev.md  README.md
+compose_app.yml  expample_env  pgdata   readme         README.md
+compose_db.yml   LICENSE       project  README_dev.md
+```
+#### create .env file
+```bash
+sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ mv expample_env .env
+sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$
 ```
 #### create db store dir 
 ```bash
@@ -319,22 +326,22 @@ sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$
 ```
 #### run db container
 ```bash
-sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ sudo docker compose -f compose_db.yml up -d
-[sudo] password for sibir007:
-[+] up 2/2
- ✔ Container simple_solutions_test_task-adminer-1 Running                          0.0s
- ✔ Container postgres_db                          Running                          0.0s
-sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$
+sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ sudo docker compose -f  compose_db.yml  up -d
+sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task/project$ sudo docker ps
+CONTAINER ID   IMAGE      COMMAND                  CREATED         STATUS         PORTS                                         NAMES
+bcd8915ddb0a   adminer    "entrypoint.sh docke…"   4 minutes ago   Up 4 minutes   0.0.0.0:8090->8080/tcp, [::]:8090->8080/tcp   simple_solutions_test_task-adminer-1
+52266a762db1   postgres   "docker-entrypoint.s…"   4 minutes ago   Up 4 minutes   0.0.0.0:5430->5432/tcp, [::]:5430->5432/tcp   postgres_db
+sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task/project$
 ```
 #### init db
 
-init virtual env because deploy process on dev machine
+##### init virtual env because deploy process on dev machine
 ```bash
 sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ python3 -m venv .venv
 sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ source ./.venv/bin/activate
 (.venv) sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$
 ```
-install dependancies
+##### install dependancies
 ```bash
 (.venv) sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ pip install -r project/requirements.txt
 Collecting fastapi==0.128.0 (from -r project/requirements.txt (line 2))
@@ -344,10 +351,44 @@ Collecting Jinja2==3.1.2 (from -r project/requirements.txt (line 3))
 (.venv) sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$
 ```
 
-run init script
+##### run init db script
+```bash
+(.venv) sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ cd project/
+(.venv) sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task/project$ python3 init_db.py
+---------------------postgresql+psycopg2://sibir:sibirpass@localhost:5430/selery_app-------------------
+2026-01-24 14:10:03,504 INFO sqlalchemy.engine.Engine select pg_catalog.version()
+2026-01-24 14:10:03,505 INFO sqlalchemy.engine.Engine [raw sql] {}
+2026-01-24 14:10:03,507 INFO sqlalchemy.engine.Engine select current_schema()
+2026-01-24 14:10:03,507 INFO sqlalchemy.engine.Engine [raw sql] {}
+...
+```
+#### check db initiation
+##### connect to postgres
+```bash
+# connection props in compose_db.yml
+(.venv) sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task/project$ psql -h localhost -p 5430 -d selery_app -U sibir
+Password for user sibir: # sibirpass 
+psql (16.11 (Ubuntu 16.11-0ubuntu0.24.04.1), server 18.1 (Debian 18.1-1.pgdg13+2))
+WARNING: psql major version 16, server major version 18.
+         Some psql features might not work.
+Type "help" for help.
 
+selery_app=# \dt
+          List of relations
+ Schema |    Name    | Type  | Owner
+--------+------------+-------+-------
+ public | index      | table | sibir
+ public | indexprice | table | sibir
+ public | stock      | table | sibir
+ public | ticker     | table | sibir
+(4 rows)
 
-
+selery_app=# \q
+(.venv) sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task/project$
+```
+##### connect to adminer http://localhost:8090/
+![login](readme/admiter_login.png)
+![adminer](readme/adminer.png)
 
 ### APP HOST
 #### clone git repos
@@ -361,68 +402,58 @@ remote: Total 292 (delta 169), reused 204 (delta 84), pack-reused 0 (from 0)
 Receiving objects: 100% (292/292), 265.01 KiB | 1005.00 KiB/s, done.
 Resolving deltas: 100% (169/169), done.
 sibir007@sibir007:~/repos/deploy/app$ cd simple_solutions_test_task/
+sibir007@sibir007:~/repos/deploy/app/simple_solutions_test_task$ ls
+compose_app.yml  expample_env  project  README_dev.md
+compose_db.yml   LICENSE       readme   README.md
+sibir007@sibir007:~/repos/deploy/app/simple_solutions_test_task$
+```
+#### create .env file
+```bash
+sibir007@sibir007:~/repos/deploy/app/simple_solutions_test_task$ mv expample_env .env
+sibir007@sibir007:~/repos/deploy/app/simple_solutions_test_task$
+```
+#### create logs files
+```bash
+sibir007@sibir007:~/repos/deploy/app/simple_solutions_test_task$ mkdir project/logs
+sibir007@sibir007:~/repos/deploy/app/simple_solutions_test_task$ touch project/logs/celery.log
+sibir007@sibir007:~/repos/deploy/app/simple_solutions_test_task$ touch project/logs/beat.log
+```
+
+#### run servises
+```bash
+sibir007@sibir007:~/repos/deploy/app/simple_solutions_test_task$ sudo docker compose -f compose_app.yml up -d
+WARN[0000] No services to build
+WARN[0000] Found orphan containers ([simple_solutions_test_task-adminer-1 postgres_db postgres_container]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
+[+] up 5/5
+ ✔ Container redis                                  Created                 0.2s
+ ✔ Container worker                                 Created                 0.1s
+ ✔ Container web                                    Created                 0.1s
+ ✔ Container beat                                   Created                 0.1s
+ ✔ Container simple_solutions_test_task-dashboard-1 Created                 0.1s
+sibir007@sibir007:~/repos/deploy/app/simple_solutions_test_task$
+```
+#### checks
+##### running tests
+```bash
+sibir007@sibir007:~/repos/deploy/app/simple_solutions_test_task$ sudo docker compose -f compose_app.yml exec web python -m pytest
+============================== test session starts ==============================
+platform linux -- Python 3.11.2, pytest-9.0.2, pluggy-1.6.0
+rootdir: /usr/src/app
+plugins: anyio-4.12.1
+collected 7 items
+
+tests/test_tasks.py .......                                               [100%]
+
+=============================== 7 passed in 0.62s ===============================
 sibir007@sibir007:~/repos/deploy/app/simple_solutions_test_task$
 ```
 
+##### connect to flower  http://localhost:5555/
 
+![flower](readme/flower.png)
 
-https://testdriven.io/blog/fastapi-and-celery/
-https://python.plainenglish.io/asynchronous-task-queuing-with-celery-d9709364e686
-https://testdriven.io/blog/fastapi-sqlmodel/
+##### test api from http://localhost:8000/docs
 
-
-```sh
-(.venv) sibir007@sibir007:~/repos/simple_solutions-_test_task$ sudo docker compose up -d
-WARN[0000] /home/sibir007/repos/simple_solutions-_test_task/compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion WARN[0000] No services to build                         
-[+] up 3/3
- ✔ Volume simple_solutions-_test_task_pgdata     Created              0.0s 
- ✔ Container simple_solutions-_test_task-redis-1 Running              0.0s 
- ✔ Container postgres_db                         Created              0.1s 
-(.venv) sibir007@sibir007:~/repos/simple_solutions-_test_task$ sudo dosker ps
-[sudo] password for sibir007: 
-sudo: dosker: command not found
-(.venv) sibir007@sibir007:~/repos/simple_solutions-_test_task$ sudo docker ps
-CONTAINER ID   IMAGE             COMMAND                  CREATED          STATUS          PORTS                                         NAMES
-41da061eaaa3   postgres:latest   "docker-entrypoint.s…"   11 minutes ago   Up 11 minutes   0.0.0.0:5430->5432/tcp, [::]:5430->5432/tcp   postgres_db
-4d6415e4ab01   redis:latest      "docker-entrypoint.s…"   2 hours ago      Up 2 hours      6379/tcp                                      simple_solutions-_test_task-redis-1
-(.venv) sibir007@sibir007:~/repos/simple_solutions-_test_task$ psql -h localhost -p 5430 -d postgres -U postgres
-Password for user postgres: 
-postgres=# CREATE DATABASE celery;
-CREATE DATABASE
-postgres=# SELECT datname, dattablespace FROM pg_catalog.pg_database;
-  datname  | dattablespace 
------------+---------------
- postgres  |          1663
- celery    |          1663
- template1 |          1663
- template0 |          1663
-(4 rows)
-postgres=# \c celery
-You are now connected to database "celery" as user "postgres".
-celery=# \dt
-Did not find any relations.
-celery=# \q
-(.venv) sibir007@sibir007:~/repos/simple_solutions-_test_task$ 
-```
-
-```sh
-sudo docker compose up -d --no-deps --build <service_name>
-```
-
-```sh
-sudo docker compose exec web python -m pytest
-```
-
-```sh
-(.venv) sibir007@sibir007:~/repos/simple_solutions_test_task$ redis-cli ping
-PONG
-```
-
-```sh
-sudo docker compose exec web python -m pytest -k "test_mock_task"
-```
-
-```sh
-sudo docker exec web python -m pytest -s -k test_get_index_price # -s выод print to terminal
-```
+![fastapi1](readme/fast1.png)
+![fastapi1](readme/fast2.png)
 

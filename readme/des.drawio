@@ -1,11 +1,11 @@
 <mxfile host="65bd71144e">
     <diagram id="ERyXmQfxpO6tMonUeF4B" name="Page-1">
-        <mxGraphModel dx="915" dy="918" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="495" dy="322" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="46" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#FFFFFF;" vertex="1" parent="1">
-                    <mxGeometry x="70" y="890" width="670" height="560" as="geometry"/>
+                    <mxGeometry x="90" y="910" width="670" height="560" as="geometry"/>
                 </mxCell>
                 <mxCell id="3" value="fastapi_app" style="shape=folder;fontStyle=1;tabWidth=110;tabHeight=30;tabPosition=left;html=1;boundedLbl=1;labelInHeader=1;container=1;collapsible=0;recursiveResize=0;whiteSpace=wrap;" vertex="1" parent="1">
                     <mxGeometry x="335" y="910" width="150" height="100" as="geometry"/>
@@ -16,7 +16,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="13" value="database" style="shape=folder;fontStyle=1;tabWidth=110;tabHeight=30;tabPosition=left;html=1;boundedLbl=1;labelInHeader=1;container=1;collapsible=0;recursiveResize=0;whiteSpace=wrap;" vertex="1" parent="1">
-                    <mxGeometry x="90" y="1030" width="195" height="230" as="geometry"/>
+                    <mxGeometry x="90" y="1040" width="195" height="230" as="geometry"/>
                 </mxCell>
                 <mxCell id="14" value="db.py" style="html=1;whiteSpace=wrap;" vertex="1" parent="13">
                     <mxGeometry width="110" height="30" relative="1" as="geometry">
@@ -29,7 +29,16 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="17" style="edgeStyle=none;html=1;exitX=0.464;exitY=-0.014;exitDx=0;exitDy=0;entryX=0.47;entryY=0.965;entryDx=0;entryDy=0;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="13" source="16" target="14">
-                    <mxGeometry relative="1" as="geometry"/>
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="87" y="160"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="55" value="&lt;div style=&quot;font-family: &amp;quot;Droid Sans Mono&amp;quot;, monospace; line-height: 19px; white-space-collapse: preserve;&quot;&gt;&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="17">
+                    <mxGeometry x="-0.2977" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
                 </mxCell>
                 <mxCell id="18" value="read_data.py" style="html=1;whiteSpace=wrap;" vertex="1" parent="13">
                     <mxGeometry width="110" height="30" relative="1" as="geometry">
@@ -69,27 +78,20 @@
                         <mxPoint x="30" y="60" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="30" style="edgeStyle=none;html=1;exitX=0.52;exitY=-0.107;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitPerimeter=0;" edge="1" parent="23" source="27" target="28">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="31" value="&lt;div style=&quot;font-family: &amp;quot;Droid Sans Mono&amp;quot;, monospace; font-size: 14px; line-height: 19px; white-space-collapse: preserve;&quot;&gt;&lt;span style=&quot;&quot;&gt;call_api_one&lt;/span&gt;&lt;span style=&quot;&quot;&gt;(&lt;/span&gt;&lt;span style=&quot;&quot;&gt;)&lt;/span&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;fontColor=#FFFFFF;" vertex="1" connectable="0" parent="30">
-                    <mxGeometry x="-0.015" y="-1" relative="1" as="geometry">
-                        <mxPoint as="offset"/>
-                    </mxGeometry>
-                </mxCell>
                 <mxCell id="29" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="23" source="24" target="27">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="200" y="80" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="32" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="27" target="16">
+                <mxCell id="59" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="23" source="27" target="28">
                     <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="435" y="1440" as="targetPoint"/>
+                        <mxPoint x="40" y="155" as="sourcePoint"/>
+                        <mxPoint x="-126" y="67" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="33" value="&lt;div style=&quot;font-family: &amp;quot;Droid Sans Mono&amp;quot;, monospace; font-size: 14px; line-height: 19px; white-space-collapse: preserve;&quot;&gt;&lt;span style=&quot;&quot;&gt;write_index_price&lt;/span&gt;&lt;span style=&quot;&quot;&gt;(&lt;/span&gt;&lt;span style=&quot;&quot;&gt;)&lt;/span&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;fontColor=#FFFFFF;" vertex="1" connectable="0" parent="32">
-                    <mxGeometry x="-0.1429" y="3" relative="1" as="geometry">
-                        <mxPoint x="-40" y="-7" as="offset"/>
+                <mxCell id="60" value="&lt;div style=&quot;font-size: 14px; line-height: 19px; white-space-collapse: preserve;&quot;&gt;call_api_one()&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="59">
+                    <mxGeometry x="0.0561" y="-4" relative="1" as="geometry">
+                        <mxPoint x="-1" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="36" value="shemas" style="shape=folder;fontStyle=1;tabWidth=110;tabHeight=30;tabPosition=left;html=1;boundedLbl=1;labelInHeader=1;container=1;collapsible=0;recursiveResize=0;whiteSpace=wrap;" vertex="1" parent="1">
@@ -141,6 +143,17 @@
                 <mxCell id="54" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.071;entryY=0.949;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" source="53" parent="1" target="24">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="335" y="1443" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="57" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.672;entryY=0.89;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="27" target="16">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="300" y="1420" as="sourcePoint"/>
+                        <mxPoint x="240" y="1500" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="58" value="&lt;div style=&quot;font-size: 14px; line-height: 19px; white-space-collapse: preserve;&quot;&gt;write_index_prise()&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="57">
+                    <mxGeometry x="0.0561" y="-4" relative="1" as="geometry">
+                        <mxPoint x="-1" as="offset"/>
                     </mxGeometry>
                 </mxCell>
             </root>
