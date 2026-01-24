@@ -1,23 +1,15 @@
 from datetime import datetime
-from enum import Enum
 from typing import Annotated, Literal
-from fastapi import Body, FastAPI, Form, Path, Query
-from fastapi.responses import JSONResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
-from celery.result import AsyncResult
-from shemas.fastapi_app_shemas import ResponseInem
+from fastapi import FastAPI, Path, Query
 from database.read_data import get_trick_index_info
 
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="fastapi_app/static"), name="static")
-test_templates = Jinja2Templates(directory="fastapi_app/templates")
+# app.mount("/static", StaticFiles(directory="fastapi_app/static"), name="static")
+# test_templates = Jinja2Templates(directory="fastapi_app/templates")
 
 
-@app.get("/{stock}", description="""
-""")
+@app.get("/{stock}")
 async def get_index_price(
     stock: Annotated[
         Literal["deribit", "somestock"],
