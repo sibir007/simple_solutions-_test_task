@@ -297,8 +297,72 @@ COPY . .
 
 ## DEPLOYMENT
 
-### APP HOST
+### DB HOST
+#### clone git repos
+```bash
+sibir007@sibir007:~/repos/deploy/db$ git clone https://github.com/sibir007/simple_solutions_test_task.git
+Cloning into 'simple_solutions_test_task'...
+remote: Enumerating objects: 292, done.
+remote: Counting objects: 100% (292/292), done.
+remote: Compressing objects: 100% (204/204), done.
+remote: Total 292 (delta 169), reused 204 (delta 84), pack-reused 0 (from 0)
+Receiving objects: 100% (292/292), 265.01 KiB | 1.05 MiB/s, done.
+Resolving deltas: 100% (169/169), done.
+sibir007@sibir007:~/repos/deploy/db$ cd simple_solutions_test_task/
+sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ ls
+compose_app.yml  compose_db.yml  LICENSE  project  readme  README_dev.md  README.md
+```
+#### create db store dir 
+```bash
+sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ mkdir pgdata
+sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$
+```
+#### run db container
+```bash
+sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ sudo docker compose -f compose_db.yml up -d
+[sudo] password for sibir007:
+[+] up 2/2
+ ✔ Container simple_solutions_test_task-adminer-1 Running                          0.0s
+ ✔ Container postgres_db                          Running                          0.0s
+sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$
+```
+#### init db
 
+init virtual env because deploy process on dev machine
+```bash
+sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ python3 -m venv .venv
+sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ source ./.venv/bin/activate
+(.venv) sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$
+```
+install dependancies
+```bash
+(.venv) sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$ pip install -r project/requirements.txt
+Collecting fastapi==0.128.0 (from -r project/requirements.txt (line 2))
+  Using cached fastapi-0.128.0-py3-none-any.whl.metadata (30 kB)
+Collecting Jinja2==3.1.2 (from -r project/requirements.txt (line 3))
+...
+(.venv) sibir007@sibir007:~/repos/deploy/db/simple_solutions_test_task$
+```
+
+run init script
+
+
+
+
+### APP HOST
+#### clone git repos
+```bash
+sibir007@sibir007:~/repos/deploy/app$ git clone https://github.com/sibir007/simple_solutions_test_task.git
+Cloning into 'simple_solutions_test_task'...
+remote: Enumerating objects: 292, done.
+remote: Counting objects: 100% (292/292), done.
+remote: Compressing objects: 100% (204/204), done.
+remote: Total 292 (delta 169), reused 204 (delta 84), pack-reused 0 (from 0)
+Receiving objects: 100% (292/292), 265.01 KiB | 1005.00 KiB/s, done.
+Resolving deltas: 100% (169/169), done.
+sibir007@sibir007:~/repos/deploy/app$ cd simple_solutions_test_task/
+sibir007@sibir007:~/repos/deploy/app/simple_solutions_test_task$
+```
 
 
 

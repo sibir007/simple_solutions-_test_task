@@ -1,0 +1,26 @@
+APP_CONFIG=development
+# APP_CONFIG=production
+# APP_CONFIG=test
+
+# Redis настройки
+CELERY_BROKER_URL=redis://localhost:6379/0
+CELERY_RESULT_BACKEND=redis://localhost:6379/0
+
+# postgres dev config
+POSTGRES_USER_DEV=sibir  # default
+POSTGRES_PASSWORD_DEV=sibirpass
+POSTGRES_DB_DEV=selery_app  # default
+DB_HOST_DEV=localhost
+DB_PORT_DEV=5430
+
+
+# postgres prod config
+POSTGRES_USER_PROD=sibir  # default
+POSTGRES_PASSWORD_PROD=sibirpass
+POSTGRES_DB_PROD=selery_app  # default
+DB_HOST_PROD=localhost
+DB_PORT_PROD=5430
+
+
+# sqlite for tests
+SQLITE_DATABASE_URL=sqlite:///test_database.db
